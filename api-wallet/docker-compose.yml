@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  expenses_db:
+    container_name: expenses_mysql8
+    image: mysql:8
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "3306:3306"
+    volumes:
+      - expenses_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: LKLoGb@aiy6%#oPw&XC*
+      MYSQL_DATABASE: expenses_wallet_db
+    networks:
+      - expenses_net
+    restart: unless-stopped
+
+networks:
+  expenses_net:
+    driver: bridge
+
+volumes:
+  expenses_data:
+    driver: local
