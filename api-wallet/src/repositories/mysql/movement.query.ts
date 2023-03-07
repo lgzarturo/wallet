@@ -22,7 +22,21 @@ export class MovementMySQLRepository implements MovementRepository {
     return rows[0] as Movement
   }
 
-  public async store (entry: Movement): Promise<void> {}
-  public async update (entry: Movement): Promise<void> {}
-  public async remove (id: number): Promise<void> {}
+  public async store (entry: Movement): Promise<void> {
+    await conector.execute(
+      `INSERT INTO ${this.table}(user_id, movement_type, amount) VALUES(?,?,?,?)`,
+      [entry.user_id, entry.movement_type, entry.amount])
+  }
+
+  public async update (entry: Movement): Promise<void> {
+    await conector.execute(
+      `UPDATE ${this.table} SET user_id = ?, movement_type = ?, amount = ? WHERE id = ?`,
+      [entry.user_id, entry.movement_type, entry.amount, entry.id])
+  }
+
+  public async remove (id: number): Promise<void> {
+    await conector.execute(
+      `DELETE FROM ${this.table} WHERE id = ?`,
+      [id])
+  }
 }

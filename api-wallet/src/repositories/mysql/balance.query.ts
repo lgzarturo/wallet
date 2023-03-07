@@ -32,7 +32,21 @@ export class BalanceMySQLRepository implements BalanceRepository {
     return rows[0] as Balance
   }
 
-  public async store (entry: Balance): Promise<void> {}
-  public async update (entry: Balance): Promise<void> {}
-  public async remove (id: number): Promise<void> {}
+  public async store (entry: Balance): Promise<void> {
+    await conector.execute(
+      `INSERT INTO ${this.table}(user_id, amount) VALUES(?,?,?,?)`,
+      [entry.user_id, entry.amount])
+  }
+
+  public async update (entry: Balance): Promise<void> {
+    await conector.execute(
+      `UPDATE ${this.table} SET user_id = ?, amount = ? WHERE id = ?`,
+      [entry.user_id, entry.amount, entry.id])
+  }
+
+  public async remove (id: number): Promise<void> {
+    await conector.execute(
+      `DELETE FROM ${this.table} WHERE id = ?`,
+      [id])
+  }
 }
